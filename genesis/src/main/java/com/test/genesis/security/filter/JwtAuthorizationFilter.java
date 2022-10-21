@@ -36,12 +36,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (!Objects.isNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
                 if (redisTemplate.opsForValue().get(token) != null) {
@@ -64,17 +64,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication getAuthentication(String token) {
-        Algorithm algorithm = jwtTokenProvider.getAlgorithm();
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = jwtVerifier.verify(token);
+        DecodedJWT decodedJWT = jwtTokenProvider.getDecodedJWT(token);
         String username = decodedJWT.getSubject();
         String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Arrays.stream(roles).forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role));
         });
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, null, authorities);
-        return authenticationToken;
+        return new UsernamePasswordAuthenticationToken(username, null, authorities);
     }
+
+
 }

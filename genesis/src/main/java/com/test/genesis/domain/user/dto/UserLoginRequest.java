@@ -1,4 +1,10 @@
 package com.test.genesis.domain.user.dto;
 
-public record UserLoginRequest(String email, String password) {
+import javax.validation.constraints.NotBlank;
+
+public record UserLoginRequest(
+        @NotBlank
+        String email,
+        @NotBlank
+        String password) {
 }
