@@ -1,0 +1,21 @@
+
+spring:
+  config:
+    import: jwt.yaml
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 500
+  datasource:
+    url: jdbc:mysql://localhost:3306/genesis
+    username: root
+    password: gusdnd12
+
+  redis:
+    host: localhost
+    port: 6379

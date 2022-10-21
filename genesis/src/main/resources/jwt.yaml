@@ -1,0 +1,5 @@
+jwt:
+  secret: "genesis"
+  expirationTime: "10000"
+  tokenPrefix: "Bearer "
+  headerString: "Authorization"
