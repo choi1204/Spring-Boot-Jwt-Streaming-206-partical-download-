@@ -6,7 +6,7 @@ import com.test.genesis.domain.user.dto.UserUpdateRequest;
 import com.test.genesis.security.annotation.LoginUser;
 import com.test.genesis.security.jwt.JwtAccessToken;
 import com.test.genesis.security.jwt.JwtTokenProvider;
-import com.test.genesis.security.service.UserService;
+import com.test.genesis.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

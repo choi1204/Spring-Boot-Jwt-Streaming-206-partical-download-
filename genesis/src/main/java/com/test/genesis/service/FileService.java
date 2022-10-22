@@ -1,4 +1,4 @@
-package com.test.genesis.security.service;
+package com.test.genesis.service;
 
 import com.test.genesis.domain.file.FileEntity;
 import com.test.genesis.domain.user.Role;
@@ -37,7 +37,7 @@ public class FileService {
     }
 
     private FileEntity getFile(Long fileId) {
-        return fileRepository.findById(fileId).orElseThrow(() -> new RuntimeException("없는 file입니다."));
+        return fileRepository.findEntityGraphById(fileId).orElseThrow(() -> new RuntimeException("없는 file입니다."));
     }
     public ResourceRegion fileStreaming(Long fileId, Long userId, HttpHeaders httpHeaders) throws IOException {
         FileEntity fileEntity = getFile(fileId);

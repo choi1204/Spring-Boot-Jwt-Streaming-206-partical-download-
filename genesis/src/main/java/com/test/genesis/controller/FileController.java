@@ -1,20 +1,16 @@
 package com.test.genesis.controller;
 
-import com.test.genesis.domain.file.FileEntity;
-import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.security.annotation.LoginUser;
-import com.test.genesis.security.service.FileService;
+import com.test.genesis.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.Collection;
 
 
 @RestController

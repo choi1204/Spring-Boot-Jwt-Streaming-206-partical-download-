@@ -1,7 +1,7 @@
 package com.test.genesis.security.auth;
 
 import com.test.genesis.domain.user.UserEntity;
-import com.test.genesis.security.service.UserService;
+import com.test.genesis.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
