@@ -6,6 +6,7 @@ import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.domain.user.dto.UserSignRequest;
 import com.test.genesis.domain.user.dto.UserUpdateRequest;
 import com.test.genesis.repository.UserRepository;
+import com.test.genesis.security.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

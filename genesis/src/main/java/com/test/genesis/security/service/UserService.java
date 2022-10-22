@@ -1,4 +1,4 @@
-package com.test.genesis.service;
+package com.test.genesis.security.service;
 
 import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.domain.user.dto.UserSignRequest;

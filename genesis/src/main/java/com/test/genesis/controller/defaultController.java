@@ -4,13 +4,13 @@ import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.domain.user.dto.UserSignRequest;
 import com.test.genesis.domain.user.dto.UserUpdateRequest;
 import com.test.genesis.security.annotation.LoginUser;
-import com.test.genesis.security.annotation.UserSecured;
 import com.test.genesis.security.jwt.JwtAccessToken;
 import com.test.genesis.security.jwt.JwtTokenProvider;
-import com.test.genesis.service.UserService;
+import com.test.genesis.security.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -30,21 +30,21 @@ public class defaultController {
         return ResponseEntity.ok().build();
     }
 
-    @UserSecured
     @PatchMapping("/user")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<Void> update(@LoginUser UserEntity userEntity , @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.update(userEntity.getId(), userUpdateRequest);
         return ResponseEntity.ok().build();
     }
 
-    @UserSecured
     @PostMapping("/reissue")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<JwtAccessToken> reissue(@RequestParam String refreshToken, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(jwtTokenProvider.reissue(userDetails, refreshToken));
     }
 
-    @UserSecured
     @PostMapping("/logout")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<Void> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
         jwtTokenProvider.blockToken(accessToken);
         return ResponseEntity.ok().build();

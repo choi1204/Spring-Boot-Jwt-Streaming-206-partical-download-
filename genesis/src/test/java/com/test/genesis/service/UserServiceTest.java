@@ -1,9 +1,9 @@
 package com.test.genesis.service;
 
-import com.test.genesis.TestInitUtil;
 import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.domain.user.dto.UserSignRequest;
+import com.test.genesis.security.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

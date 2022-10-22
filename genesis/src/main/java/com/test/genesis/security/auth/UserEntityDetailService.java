@@ -1,13 +1,12 @@
 package com.test.genesis.security.auth;
 
 import com.test.genesis.domain.user.UserEntity;
-import com.test.genesis.service.UserService;
+import com.test.genesis.security.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
