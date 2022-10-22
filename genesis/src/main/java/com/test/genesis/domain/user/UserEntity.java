@@ -30,6 +30,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
@@ -43,7 +44,7 @@ public class UserEntity {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.role = role;
-        isDelete = false;
+        this.isDelete = false;
     }
 
     public static UserEntity createUser(String email, String name, String phoneNumber) {

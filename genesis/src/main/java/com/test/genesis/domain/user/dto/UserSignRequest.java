@@ -1,10 +1,8 @@
 package com.test.genesis.domain.user.dto;
 
-import com.sun.istack.NotNull;
 import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 
 public record UserSignRequest (
