@@ -1,12 +1,16 @@
 package com.test.genesis.domain.user;
 
+import com.test.genesis.domain.file.FileEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.matcher.FilterableList;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "user")
 @Entity
@@ -17,7 +21,6 @@ public class UserEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Email
     @Column(unique = true, nullable = false)
     private String email;
@@ -33,6 +36,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "userEntity")
+    private List<FileEntity> fileList = new ArrayList<>();
 
     @Column(columnDefinition = "boolean default false")
     private boolean isDelete;

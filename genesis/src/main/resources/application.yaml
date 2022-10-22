@@ -1,5 +1,11 @@
 
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      location: C:\\upload
+      max-request-size: 100MB
+      max-file-size: 100MB
   config:
     import: jwt.yaml
   jpa:
