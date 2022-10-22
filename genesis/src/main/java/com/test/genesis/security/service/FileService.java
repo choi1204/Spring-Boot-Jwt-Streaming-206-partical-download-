@@ -1,6 +1,7 @@
 package com.test.genesis.security.service;
 
 import com.test.genesis.domain.file.FileEntity;
+import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.repository.FileRepository;
 import com.test.genesis.strategy.FileDownload;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
+import java.rmi.RemoteException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +36,34 @@ public class FileService {
         fileRepository.save(fileEntity);
     }
 
-    public ResourceRegion fileStreaming(Long id, HttpHeaders httpHeaders) throws IOException {
-        FileEntity fileEntity = fileRepository.findById(id).orElseThrow(() -> new RuntimeException("없는 파일 id입니다."));
+    private FileEntity getFile(Long fileId) {
+        return fileRepository.findById(fileId).orElseThrow(() -> new RuntimeException("없는 file입니다."));
+    }
+    public ResourceRegion fileStreaming(Long fileId, Long userId, HttpHeaders httpHeaders) throws IOException {
+        FileEntity fileEntity = getFile(fileId);
+        if (!checkUser(fileEntity.getUserEntity(), userId)) {
+            throw new RuntimeException("잘못된 유저 접근입니다.");
+        }
         return fileDownload.streaming(httpHeaders, fileEntity);
+    }
+
+    public boolean checkUser(UserEntity userEntity, Long checkId) {
+        Role role = userEntity.getRole();
+        switch(role) {
+            case USER -> {
+                if (userEntity.getId().equals(checkId)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            case ADMIN -> {
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
     }
 
 

@@ -1,5 +1,7 @@
 package com.test.genesis.controller;
 
+import com.test.genesis.domain.file.FileEntity;
+import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.security.annotation.LoginUser;
 import com.test.genesis.security.service.FileService;
@@ -24,7 +26,6 @@ public class FileController {
     private final FileService fileService;
     @PostMapping
     public ResponseEntity<Void> upload(@RequestParam MultipartFile[] files, @LoginUser UserEntity userEntity) {
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
         for (MultipartFile file : files) {
             fileService.upload(file, userEntity);
@@ -34,8 +35,8 @@ public class FileController {
 
     @GetMapping("/{fileId}")
     public ResponseEntity<ResourceRegion> stream(HttpHeaders httpHeaders, @PathVariable Long fileId, @LoginUser UserEntity userEntity) throws IOException {
-        if (us)
-        ResourceRegion resourceRegion = fileService.fileStreaming(fileId, httpHeaders);
+
+        ResourceRegion resourceRegion = fileService.fileStreaming(fileId, userEntity.getId(), httpHeaders);
 
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                 .contentType(MediaTypeFactory.getMediaType(resourceRegion.getResource()).orElse(MediaType.APPLICATION_OCTET_STREAM))
