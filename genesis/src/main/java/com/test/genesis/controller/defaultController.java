@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
 @RequiredArgsConstructor
 public class defaultController {
 
@@ -29,8 +28,7 @@ public class defaultController {
         userService.sign(userSignRequest);
         return ResponseEntity.ok().build();
     }
-
-    @PatchMapping("/user")
+    @PutMapping("/user")
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<Void> update(@LoginUser UserEntity userEntity , @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.update(userEntity.getId(), userUpdateRequest);

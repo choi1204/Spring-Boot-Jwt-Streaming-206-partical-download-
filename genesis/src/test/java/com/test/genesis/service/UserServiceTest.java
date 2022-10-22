@@ -24,10 +24,10 @@ class UserServiceTest {
     @BeforeEach
     public void init() {
         userService.deleteAll();
-        UserSignRequest userSignRequest = new UserSignRequest("test@naver.com", "test", "010-0100-1000", Role.USER);
+        UserSignRequest userSignRequest = new UserSignRequest("test@naver.com", "test","password", "010-0100-1000", Role.USER.getType());
         user = userService.sign(userSignRequest);
 
-        UserSignRequest deleteUser = new UserSignRequest("delete@naver.com", "delete", "010-0000-0000", Role.USER);
+        UserSignRequest deleteUser = new UserSignRequest("delete@naver.com", "delete", "password", "010-1111-1111", Role.USER.getType());
         delete = userService.sign(deleteUser);
         userService.softDelete(delete.getId());
     }

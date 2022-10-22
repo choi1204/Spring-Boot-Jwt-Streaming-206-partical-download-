@@ -5,24 +5,30 @@ import com.test.genesis.domain.user.UserEntity;
 
 import javax.validation.constraints.NotBlank;
 
-public record UserSignRequest (
-    @NotBlank
-    String email,
+public record UserSignRequest(
+        @NotBlank
+        String email,
 
-    @NotBlank
-    String name,
+        @NotBlank
+        String name,
 
-    @NotBlank
-    String phoneNumber,
+        @NotBlank
+        String password,
 
-    Role role
+        @NotBlank
+        String phoneNumber,
+        @NotBlank
+        String type
 ) {
     public UserEntity toEntity() {
-        UserEntity userEntity = null;
-        switch (role) {
-            case USER -> userEntity = UserEntity.createUser(email, name, phoneNumber);
-            case ADMIN -> userEntity = UserEntity.createAdmin(email, name, phoneNumber);
-        }
-        return userEntity;
+        Role role = Role.getRole(type);
+
+        return UserEntity.builder()
+                .email(email)
+                .name(name)
+                .password(password)
+                .phoneNumber(phoneNumber)
+                .role(role)
+                .build();
     }
 }

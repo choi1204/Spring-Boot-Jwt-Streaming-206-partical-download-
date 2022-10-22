@@ -3,6 +3,7 @@ package com.test.genesis.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.test.genesis.domain.user.UserEntity;
 import com.test.genesis.security.auth.UserEntityDetail;
@@ -27,11 +28,11 @@ public class JwtTokenProvider {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public Algorithm getAlgorithm() {
-        return Algorithm.HMAC256(jwtProperties.getSecret());
+        return Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
     }
 
     private String generateToken(UserDetails userDetails, Date expirationDate) {
-        Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
+        Algorithm algorithm = getAlgorithm();
         UserEntityDetail userDetail = (UserEntityDetail) userDetails;
         return JWT.create()
                 .withSubject(userDetail.getUsername())
@@ -51,20 +52,25 @@ public class JwtTokenProvider {
 
     public JwtRefreshToken generateRefreshToken(UserDetails userDetails) {
         Date expirationDateForRefreshToken
-                = TimerUtils.getExpirationDate(jwtProperties.getExpirationTime() * 2);
+                = TimerUtils.getExpirationDate(jwtProperties.getExpirationTime() * 7);
         String token = generateToken(userDetails, expirationDateForRefreshToken);
-        return new JwtRefreshToken(token, expirationDateForRefreshToken);
+        return new JwtRefreshToken(jwtProperties.getTokenPrefix() + token, expirationDateForRefreshToken);
     }
 
     public boolean isExpired(String token) {
-        DecodedJWT decodedJWT = getDecodedJWT(token);
+        DecodedJWT decodedJWT = verifyJwtToken(token);
         return TimerUtils.isExpired(decodedJWT.getExpiresAt());
     }
-    public DecodedJWT getDecodedJWT(String token) {
+    public DecodedJWT verifyJwtToken(String token) {
+        if (token == null || !token.startsWith(jwtProperties.getTokenPrefix())) {
+            throw new JWTVerificationException("부적절한 토큰값입니다.");
+        }
+        token = token.substring(jwtProperties.getTokenPrefix().length());
         Algorithm algorithm = getAlgorithm();
         JWTVerifier jwtVerifier = JWT.require(algorithm).build();
         return jwtVerifier.verify(token);
     }
+
     public JwtAccessToken reissue(UserDetails userDetail, String refreshToken) {
         String tokenInRedis = redisTemplate.opsForValue().get(userDetail.getUsername()).toString();
         if (Objects.isNull(refreshToken) || !refreshToken.equals(tokenInRedis)) {
@@ -74,10 +80,10 @@ public class JwtTokenProvider {
     }
 
     public void blockToken(String token) {
-        DecodedJWT decodedJWT = getDecodedJWT(token);
+        DecodedJWT decodedJWT = verifyJwtToken(token);
         String username = decodedJWT.getSubject();
         redisTemplate.delete(username);
         redisTemplate.opsForValue().set(token, true);
-        redisTemplate.expire(token, jwtProperties.getExpirationTime(), TimeUnit.MICROSECONDS);
+        redisTemplate.expire(token, jwtProperties.getExpirationTime(), TimeUnit.MILLISECONDS);
     }
 }

@@ -1,10 +1,12 @@
 package com.test.genesis.domain.user;
 
 import com.test.genesis.domain.file.FileEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.bytebuddy.matcher.FilterableList;
 import org.hibernate.annotations.Where;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -45,25 +47,25 @@ public class UserEntity {
 
     private LocalDateTime deletedAt;
 
-    private UserEntity(String email, String name, String phoneNumber, Role role) {
+    @Builder
+    private UserEntity(Long id, String email, String name, String password, String phoneNumber, Role role) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.password = password;
         this.role = role;
         this.isDelete = false;
     }
 
-    public static UserEntity createUser(String email, String name, String phoneNumber) {
-        return new UserEntity(email,name, phoneNumber, Role.USER);
+    public void encrypt(PasswordEncoder passwordEncoder, String password) {
+        this.password = passwordEncoder.encode(password);
     }
 
-    public static UserEntity createAdmin(String email, String name, String phoneNumber) {
-        return new UserEntity(email,name, phoneNumber, Role.ADMIN);
-    }
-
-    public void update(String name, String phoneNumber) {
+    public void update(String name, String phoneNumber, String password, PasswordEncoder passwordEncoder) {
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.password = passwordEncoder.encode(password);
     }
 
     public void delete() {

@@ -5,6 +5,7 @@ import com.test.genesis.domain.user.dto.UserSignRequest;
 import com.test.genesis.domain.user.dto.UserUpdateRequest;
 import com.test.genesis.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +18,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     @Transactional
     public UserEntity sign(UserSignRequest userSignRequest) {
         UserEntity userEntity = userSignRequest.toEntity();
+        userEntity.encrypt(passwordEncoder, userEntity.getPassword());
         return userRepository.save(userEntity);
     }
 
@@ -38,8 +41,9 @@ public class UserService {
     @Transactional
     public void update(Long id, UserUpdateRequest userUpdateRequest) {
         UserEntity userEntity = findById(id);
-        userEntity.update(userUpdateRequest.name(), userUpdateRequest.phoneNumber());
+        userEntity.update(userUpdateRequest.name(), userUpdateRequest.phoneNumber(), userUpdateRequest.password(), passwordEncoder);
     }
+
 
     @Transactional
     public void softDelete(Long id) {

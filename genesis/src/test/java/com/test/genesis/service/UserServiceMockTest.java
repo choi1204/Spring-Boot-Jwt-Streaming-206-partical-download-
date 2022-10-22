@@ -32,14 +32,14 @@ class UserServiceMockTest {
     @Test
     @DisplayName("회원 가입 할 수 있다.")
     public void _1() {
-        UserSignRequest userSignRequest = new UserSignRequest("test@naver.com", "test", "010-0100-1000", Role.USER);
+        UserSignRequest userSignRequest = new UserSignRequest("test@naver.com", "test", "password", "010-0100-1000", Role.USER.getType());
         given(userRepository.save(any())).willReturn(userSignRequest.toEntity());
         UserEntity userEntity = userService.sign(userSignRequest);
 
         assertThat(userSignRequest.email()).isEqualTo(userEntity.getEmail());
         assertThat(userSignRequest.name()).isEqualTo(userEntity.getName());
         assertThat(userSignRequest.phoneNumber()).isEqualTo(userEntity.getPhoneNumber());
-        assertThat(userSignRequest.role()).isEqualTo(userEntity.getRole());
+        assertThat(userSignRequest.type()).isEqualTo(userEntity.getRole().getType());
     }
 
     @Test
@@ -66,7 +66,7 @@ class UserServiceMockTest {
     public void _3() {
         UserEntity user = TestInitUtil.createUser();
         given(userRepository.findById(any())).willReturn(Optional.of(user));
-        UserUpdateRequest userUpdateRequest = new UserUpdateRequest("update", "010-1111-1111");
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest("update", "010-1111-1111", "password");
         userService.update(1L, userUpdateRequest);
 
         assertThat(user.getName()).isEqualTo(userUpdateRequest.name());

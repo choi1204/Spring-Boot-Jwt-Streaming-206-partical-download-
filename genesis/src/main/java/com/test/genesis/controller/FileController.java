@@ -30,7 +30,7 @@ public class FileController {
     }
 
     @GetMapping("/{fileId}")
-    public ResponseEntity<ResourceRegion> stream(HttpHeaders httpHeaders, @PathVariable Long fileId, @LoginUser UserEntity userEntity) throws IOException {
+    public ResponseEntity<ResourceRegion> stream(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long fileId, @LoginUser UserEntity userEntity) throws IOException {
 
         ResourceRegion resourceRegion = fileService.fileStreaming(fileId, userEntity.getId(), httpHeaders);
 

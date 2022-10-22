@@ -5,6 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.test.genesis.domain.user.Role;
+import com.test.genesis.domain.user.UserEntity;
+import com.test.genesis.security.auth.UserEntityDetail;
 import com.test.genesis.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,14 +43,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!Objects.isNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (!Objects.isNull(bearerToken)) {
             try {
-                String token = authorizationHeader.substring("Bearer ".length());
-                if (redisTemplate.opsForValue().get(token) != null) {
+                if (redisTemplate.opsForValue().get(bearerToken) != null) {
                     logger.warn("this token already logout!");
                 } else {
-                    Authentication authentication = getAuthentication(token);
+                    Authentication authentication = getAuthentication(bearerToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
@@ -64,14 +66,22 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication getAuthentication(String token) {
-        DecodedJWT decodedJWT = jwtTokenProvider.getDecodedJWT(token);
-        String username = decodedJWT.getSubject();
-        String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        Arrays.stream(roles).forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role));
-        });
-        return new UsernamePasswordAuthenticationToken(username, null, authorities);
+        DecodedJWT decodedJWT = jwtTokenProvider.verifyJwtToken(token);
+        String email = decodedJWT.getSubject();
+        String[] rolesString = decodedJWT.getClaim("roles").asArray(String.class);
+        Long id = decodedJWT.getClaim("id").asLong();
+        Collection<GrantedAuthority> roles = new ArrayList<>();
+        for (String roleString : rolesString) {
+            roles.add(new SimpleGrantedAuthority(roleString));
+        }
+
+        UserEntity userEntity = UserEntity.builder()
+                .id(id)
+                .email(email)
+                .build();
+        UserEntityDetail userEntityDetail = new UserEntityDetail(userEntity);
+
+        return new UsernamePasswordAuthenticationToken(userEntityDetail, null, roles);
     }
 
 
