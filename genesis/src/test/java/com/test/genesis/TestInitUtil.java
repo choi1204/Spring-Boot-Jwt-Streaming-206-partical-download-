@@ -3,6 +3,7 @@ package com.test.genesis;
 import com.test.genesis.domain.file.FileEntity;
 import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.FileInputStream;
@@ -42,4 +43,5 @@ public class TestInitUtil {
         String url = "C:\\Users\\choih\\OneDrive\\문서\\GitHub\\Genesis_Lab_Tes\\genesis\\src\\main\\resources\\files\\7482edb8-c75d-4f11-96a9-42a072875084_test.mp4";
         return new MockMultipartFile("video", "test.mp4", "video/mp4", new FileInputStream(url));
     }
+
 }

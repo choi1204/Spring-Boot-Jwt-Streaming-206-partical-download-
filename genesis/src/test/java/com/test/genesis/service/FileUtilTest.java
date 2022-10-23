@@ -47,7 +47,7 @@ class FileUtilTest {
 
         UserEntity userEntity = TestInitUtil.createUser();
 
-        String url = "C:\\Users\\choih\\OneDrive\\문서\\GitHub\\Genesis_Lab_Tes\\genesis\\src\\main\\resources\\files\\7482edb8-c75d-4f11-96a9-42a072875084_test.mp4";
+        String url = "fail.mp4";
         assertThrows(FileNotFoundException.class, () ->
                 new MockMultipartFile("video", "test.mp4", "video/mp4", new FileInputStream(url)));
     }
