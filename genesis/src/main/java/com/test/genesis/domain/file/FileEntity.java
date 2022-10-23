@@ -22,7 +22,7 @@ public class FileEntity {
     @Column(nullable = false)
     private String mimeType;
     @Column(nullable = false)
-    private long  size;
+    private long size;
 
     public FileEntity(String fileName, String fileUrl, String mimeType, long size, UserEntity userEntity) {
         this.fileName = fileName;
