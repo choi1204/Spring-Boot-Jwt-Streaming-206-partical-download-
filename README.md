@@ -1,1 +1,37 @@
-# Genesis_Lab_Tes
+# Genesis_Lab_Test
+
+- [x] 유저관리
+  - [x] 회원가입
+  - [x] 가입정보 수정
+  - [x] 회원탈퇴
+    - soft delete 형식으로 구현
+- [x] 로그인 / 로그아웃
+  - jwt토큰을 통해 구현. JwtAuhenticaionFilter, JwtAuthorizationFilter 구현
+  - 필터에서 S.C에 UserDetails객체저장.
+    - 객체 내부에 pk값 넣어서 DB접근 최소화.
+    - Controller에서 @AuthenticationPrincipal 활용해서 UserDetails 객체 사용
+  - 로그아웃의 경우 redis에 <token, boolean>형식으로 저장해서 block 처리.
+  - [x] access Token
+  - [x] refresh Token
+    - refresh token의 경우 redis에 <username, refreshToken> 형태로 저장.
+    - refresh token은 클라이언트에서 reissue 사용할 때 사용.
+  - [ ] Oauth
+    - oauth토큰 구현x
+- [x] 비디오 파일 재생
+  - [x] 비디오 소유자, admin 접근 
+    - @Secured 활용해서 접근 제어. 후 내부에서 소유자 인지 확인하는 로직 checkUser 메서드.
+  - [x] 비디오 파일 재생
+    - partical 206 Download 구현
+    - ResourceRegion 활용해 청크크기만큼 header의 range 범위만큼 전송.
+  - [x] html 태그로 재생 검증
+    - ViewController를 통해 구현
+    - 인증 로직 제거하기 위해 ViewRestController구현
+    - FileController를 통해 파일 upload이후 ViewController의 index페이지 접근시 시청 가능
+    - video 태그로 구현
+    - postman으로 요청시 동영상 재생x (웹페이지 o)
+- [x] 예외처리
+  - RestControllerAdvice와 spring-validation을 통해 예외처리.
+- [x] 권한별 접근 제어
+  - @Secured를 통해 제어.
+- [x] 타 유저 리소스 조회 불가
+  - token을 통해 자기 정보만 수정가능.

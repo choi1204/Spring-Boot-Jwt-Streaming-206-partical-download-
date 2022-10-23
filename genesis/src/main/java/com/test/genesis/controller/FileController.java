@@ -16,10 +16,11 @@ import java.io.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/file")
-@Secured({"ROLE_USER", "ROLE_ADMIN"})
+
 public class FileController {
 
     private final FileService fileService;
+    @Secured({"ROLE_USER")
     @PostMapping
     public ResponseEntity<Void> upload(@RequestParam MultipartFile[] files, @LoginUser UserEntity userEntity) {
 
@@ -29,6 +30,7 @@ public class FileController {
         return ResponseEntity.ok().build();
     }
 
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/{fileId}")
     public ResponseEntity<ResourceRegion> stream(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long fileId, @LoginUser UserEntity userEntity) throws IOException {
 
