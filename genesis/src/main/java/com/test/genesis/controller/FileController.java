@@ -32,7 +32,7 @@ public class FileController {
     @GetMapping("/{fileId}")
     public ResponseEntity<ResourceRegion> stream(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long fileId, @LoginUser UserEntity userEntity) throws IOException {
 
-        ResourceRegion resourceRegion = fileService.fileStreaming(fileId, userEntity.getId(), httpHeaders);
+        ResourceRegion resourceRegion = fileService.fileStreaming(fileId, userEntity, httpHeaders);
 
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                 .contentType(MediaTypeFactory.getMediaType(resourceRegion.getResource()).orElse(MediaType.APPLICATION_OCTET_STREAM))

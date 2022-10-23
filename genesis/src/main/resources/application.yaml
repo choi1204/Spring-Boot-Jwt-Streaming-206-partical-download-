@@ -1,7 +1,7 @@
 
 spring:
   freemarker:
-    template-loader-path: classpath:/templates
+    template-loader-path: /templates
     suffix: .ftl
 
 

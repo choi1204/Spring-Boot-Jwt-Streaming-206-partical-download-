@@ -24,6 +24,10 @@ public class LocalFileUpload implements FileUpload {
 
     private final String uploadPath = "C:\\Users\\choih\\OneDrive\\문서\\GitHub\\Genesis_Lab_Tes\\genesis\\src\\main\\resources\\files";
 
+    public String getUploadPath() {
+        return uploadPath;
+    }
+
     public FileEntity upload(MultipartFile multipartFile, UserEntity userEntity) {
         String originalName = multipartFile.getOriginalFilename();
         String uuid = UUID.randomUUID().toString();
@@ -35,7 +39,14 @@ public class LocalFileUpload implements FileUpload {
         } catch (IOException e) {
             throw new RuntimeException("파일 업로드에 실패하였습니다." + e.getMessage());
         }
-        return new FileEntity(fileName, path.toString(), multipartFile.getContentType(), multipartFile.getSize(), userEntity);
+        return FileEntity.builder()
+                .fileName(fileName)
+                .fileUrl(path.toString())
+                .mimeType(multipartFile.getContentType())
+                .size(multipartFile.getSize())
+                .userEntity(userEntity)
+                .build();
+
     }
 
     private String makeFolder() {

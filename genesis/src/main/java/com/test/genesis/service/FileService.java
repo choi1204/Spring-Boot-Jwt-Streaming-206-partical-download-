@@ -28,9 +28,9 @@ public class FileService {
     private final FileDownload fileDownload;
 
     @Transactional
-    public void upload(MultipartFile multipartFile, UserEntity userEntity) {
+    public FileEntity upload(MultipartFile multipartFile, UserEntity userEntity) {
         FileEntity fileEntity = fileUpload.upload(multipartFile, userEntity);
-        fileRepository.save(fileEntity);
+        return fileRepository.save(fileEntity);
     }
 
     public Long getIdByFileName(String fileName) {
@@ -39,9 +39,9 @@ public class FileService {
     private FileEntity getFile(Long fileId) {
         return fileRepository.findEntityGraphById(fileId).orElseThrow(() -> new RuntimeException("없는 file입니다."));
     }
-    public ResourceRegion fileStreaming(Long fileId, Long userId, HttpHeaders httpHeaders) throws IOException {
+    public ResourceRegion fileStreaming(Long fileId, UserEntity user, HttpHeaders httpHeaders) throws IOException {
         FileEntity fileEntity = getFile(fileId);
-        if (!checkUser(fileEntity.getUserEntity(), userId)) {
+        if (!checkUser(user, fileEntity.getUserEntity().getId())) {
             throw new RuntimeException("잘못된 유저 접근입니다.");
         }
         return fileDownload.streaming(httpHeaders, fileEntity);

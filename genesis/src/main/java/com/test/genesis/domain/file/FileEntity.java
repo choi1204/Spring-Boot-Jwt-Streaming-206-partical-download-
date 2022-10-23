@@ -1,6 +1,7 @@
 package com.test.genesis.domain.file;
 
 import com.test.genesis.domain.user.UserEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +25,9 @@ public class FileEntity {
     @Column(nullable = false)
     private long size;
 
-    public FileEntity(String fileName, String fileUrl, String mimeType, long size, UserEntity userEntity) {
+    @Builder
+    public FileEntity(Long id, String fileName, String fileUrl, String mimeType, long size, UserEntity userEntity) {
+        this.id = id;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
         this.mimeType = mimeType;

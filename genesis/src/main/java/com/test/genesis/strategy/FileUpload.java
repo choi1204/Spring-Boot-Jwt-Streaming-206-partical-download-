@@ -10,4 +10,6 @@ import java.io.FileNotFoundException;
 
 public interface FileUpload {
     FileEntity upload(MultipartFile multipartFile, UserEntity userEntity);
+
+    String getUploadPath();
 }
