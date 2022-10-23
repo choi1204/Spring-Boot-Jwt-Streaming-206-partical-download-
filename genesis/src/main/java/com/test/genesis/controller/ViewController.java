@@ -14,11 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * RestApi활용해서 비디오 upload시 모든 video resource/files로 저장.
- * view 테스트 시 권한 상관없이 upload된 video partical download 실행.
- * 임의로 resource/files/에 동영상 삽입시 에러 발생.
- */
 @Controller
 @RequiredArgsConstructor
 public class ViewController {

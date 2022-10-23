@@ -1,6 +1,7 @@
-package com.test.genesis.strategy;
+package com.test.genesis.service;
 
 import com.test.genesis.domain.file.FileEntity;
+import com.test.genesis.strategy.FileDownload;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 @Component
 
-public class PartialFileDownload implements FileDownload{
+public class PartialFileDownload implements FileDownload {
 
     @Override
     public ResourceRegion streaming(HttpHeaders httpHeaders, FileEntity fileEntity) throws IOException {

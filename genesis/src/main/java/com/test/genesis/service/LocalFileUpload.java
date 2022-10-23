@@ -1,7 +1,8 @@
-package com.test.genesis.strategy;
+package com.test.genesis.service;
 
 import com.test.genesis.domain.file.FileEntity;
 import com.test.genesis.domain.user.UserEntity;
+import com.test.genesis.strategy.FileUpload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
-public class LocalFileUpload implements FileUpload{
+public class LocalFileUpload implements FileUpload {
 
     private final String uploadPath = "C:\\Users\\choih\\OneDrive\\문서\\GitHub\\Genesis_Lab_Tes\\genesis\\src\\main\\resources\\files";
 
@@ -28,8 +29,6 @@ public class LocalFileUpload implements FileUpload{
         String uuid = UUID.randomUUID().toString();
         String fileName = uuid + "_" + originalName.substring(originalName.lastIndexOf("\\") + 1);
 
-//        String folderUrl = makeFolder();
-//        String saveUrl = uploadPath + folderUrl + File.separator + File.separator  + uuid + "_" + fileName;
         Path path = Paths.get(uploadPath).resolve(fileName);
         try {
             Files.copy(multipartFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
