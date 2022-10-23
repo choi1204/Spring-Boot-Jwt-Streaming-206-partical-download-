@@ -22,7 +22,7 @@ public class UserService {
     @Transactional
     public UserEntity sign(UserSignRequest userSignRequest) {
         UserEntity userEntity = userSignRequest.toEntity();
-        userEntity.encrypt(passwordEncoder, userEntity.getPassword());
+        userEntity.encrypt(passwordEncoder);
         return userRepository.save(userEntity);
     }
 
@@ -41,7 +41,8 @@ public class UserService {
     @Transactional
     public void update(Long id, UserUpdateRequest userUpdateRequest) {
         UserEntity userEntity = findById(id);
-        userEntity.update(userUpdateRequest.name(), userUpdateRequest.phoneNumber(), userUpdateRequest.password(), passwordEncoder);
+        userEntity.update(userUpdateRequest.name(), userUpdateRequest.phoneNumber(), userUpdateRequest.password());
+        userEntity.encrypt(passwordEncoder);
     }
 
 

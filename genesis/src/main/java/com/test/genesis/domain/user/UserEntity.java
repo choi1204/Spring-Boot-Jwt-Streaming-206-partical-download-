@@ -58,14 +58,14 @@ public class UserEntity {
         this.isDelete = false;
     }
 
-    public void encrypt(PasswordEncoder passwordEncoder, String password) {
+    public void encrypt(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void update(String name, String phoneNumber, String password, PasswordEncoder passwordEncoder) {
+    public void update(String name, String phoneNumber, String password) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
     public void delete() {
