@@ -8,6 +8,7 @@ public class TestInitUtil {
         String email = "test@naver.com";
         String name = "choi";
         String phoneNumber = "010-0000-0000";
-        return UserEntity.createUser(email, name, phoneNumber);
+        String password = "password";
+        return UserEntity.builder().email(email).name(name).phoneNumber(phoneNumber).password(password).build();
     }
 }

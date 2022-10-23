@@ -4,6 +4,8 @@ import com.test.genesis.domain.user.Role;
 import com.test.genesis.domain.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,11 +17,14 @@ class UserEntityTest {
         String email = "test@naver.com";
         String name = "choi";
         String phoneNumber = "010-0000-0000";
-        UserEntity userEntity = UserEntity.createUser(email, name, phoneNumber);
+        String password = "password";
+        Role role = Role.USER;
+        UserEntity userEntity = UserEntity.builder().email(email).name(name).phoneNumber(phoneNumber).password(password).role(role).build();
 
         assertThat(userEntity.getEmail()).isEqualTo(email);
         assertThat(userEntity.getName()).isEqualTo(name);
         assertThat(userEntity.getPhoneNumber()).isEqualTo(phoneNumber);
+        assertThat(userEntity.getPassword()).isEqualTo(password);
         assertThat(userEntity.getRole()).isEqualTo(Role.USER);
     }
 
@@ -29,7 +34,9 @@ class UserEntityTest {
         String email = "test@naver.com";
         String name = "choi";
         String phoneNumber = "010-0000-0000";
-        UserEntity userEntity = UserEntity.createAdmin(email, name, phoneNumber);
+        String password = "password";
+        Role role = Role.ADMIN;
+        UserEntity userEntity = UserEntity.builder().email(email).name(name).phoneNumber(phoneNumber).password(password).role(role).build();
 
         assertThat(userEntity.getEmail()).isEqualTo(email);
         assertThat(userEntity.getName()).isEqualTo(name);
@@ -43,15 +50,19 @@ class UserEntityTest {
         String email = "test@naver.com";
         String name = "choi";
         String phoneNumber = "010-0000-0000";
-        UserEntity userEntity = UserEntity.createUser(email, name, phoneNumber);
+        String password = "password";
+        Role role = Role.USER;
+        UserEntity userEntity = UserEntity.builder().email(email).name(name).phoneNumber(phoneNumber).password(password).role(role).build();
 
         String updateName = "updateName";
         String updatePhoneNumber = "updatePhoneNumber";
-        userEntity.update(updateName, updatePhoneNumber);
+        String updatePassword = "updatePassword";
+        userEntity.update(updateName, updatePhoneNumber, updatePassword);
 
         assertThat(userEntity.getEmail()).isEqualTo(email);
         assertThat(userEntity.getName()).isEqualTo(updateName);
         assertThat(userEntity.getPhoneNumber()).isEqualTo(updatePhoneNumber);
+        assertThat(userEntity.getPassword()).isEqualTo(updatePassword);
         assertThat(userEntity.getRole()).isEqualTo(Role.USER);
     }
 
@@ -61,15 +72,19 @@ class UserEntityTest {
         String email = "test@naver.com";
         String name = "choi";
         String phoneNumber = "010-0000-0000";
-        UserEntity userEntity = UserEntity.createAdmin(email, name, phoneNumber);
+        String password = "password";
+        Role role = Role.ADMIN;
+        UserEntity userEntity = UserEntity.builder().email(email).name(name).phoneNumber(phoneNumber).password(password).role(role).build();
 
         String updateName = "updateName";
         String updatePhoneNumber = "updatePhoneNumber";
-        userEntity.update(updateName, updatePhoneNumber);
+        String updatePassword = "updatePassword";
+        userEntity.update(updateName, updatePhoneNumber, updatePassword);
 
         assertThat(userEntity.getEmail()).isEqualTo(email);
         assertThat(userEntity.getName()).isEqualTo(updateName);
         assertThat(userEntity.getPhoneNumber()).isEqualTo(updatePhoneNumber);
+        assertThat(userEntity.getPassword()).isEqualTo(updatePassword);
         assertThat(userEntity.getRole()).isEqualTo(Role.ADMIN);
     }
 
@@ -79,7 +94,9 @@ class UserEntityTest {
         String email = "test@naver.com";
         String name = "choi";
         String phoneNumber = "010-0000-0000";
-        UserEntity userEntity = UserEntity.createAdmin(email, name, phoneNumber);
+        String password = "password";
+        Role role = Role.ADMIN;
+        UserEntity userEntity = UserEntity.builder().email(email).name(name).phoneNumber(phoneNumber).password(password).role(role).build();
 
         userEntity.delete();
 
