@@ -1,5 +1,7 @@
 package com.test.genesis.strategy;
 
+import com.test.genesis.domain.file.FileEntity;
+import com.test.genesis.domain.user.UserEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -7,5 +9,5 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import java.io.FileNotFoundException;
 
 public interface FileUpload {
-    String upload(MultipartFile multipartFile);
+    FileEntity upload(MultipartFile multipartFile, UserEntity userEntity);
 }

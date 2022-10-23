@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.*;
 import java.rmi.RemoteException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +31,13 @@ public class FileService {
 
     @Transactional
     public void upload(MultipartFile multipartFile, UserEntity userEntity) {
-        String url = fileUpload.upload(multipartFile);
-
-        FileEntity fileEntity = new FileEntity(multipartFile.getOriginalFilename(), url, multipartFile.getContentType(), multipartFile.getSize(), userEntity);
+        FileEntity fileEntity = fileUpload.upload(multipartFile, userEntity);
         fileRepository.save(fileEntity);
     }
 
+    public Long getIdByFileName(String fileName) {
+        return fileRepository.findEntityGraphByFileName(fileName).orElseThrow(() -> new RuntimeException("없는 file입니다.")).getId();
+    }
     private FileEntity getFile(Long fileId) {
         return fileRepository.findEntityGraphById(fileId).orElseThrow(() -> new RuntimeException("없는 file입니다."));
     }
@@ -44,6 +46,11 @@ public class FileService {
         if (!checkUser(fileEntity.getUserEntity(), userId)) {
             throw new RuntimeException("잘못된 유저 접근입니다.");
         }
+        return fileDownload.streaming(httpHeaders, fileEntity);
+    }
+
+    public ResourceRegion fileStreamingTest(Long fileId, HttpHeaders httpHeaders) throws IOException {
+        FileEntity fileEntity = getFile(fileId);
         return fileDownload.streaming(httpHeaders, fileEntity);
     }
 

@@ -1,6 +1,15 @@
 
 spring:
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftl
+
+
   servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
     multipart:
       enabled: true
       location: C:\\upload
@@ -12,7 +21,7 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true

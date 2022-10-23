@@ -11,4 +11,6 @@ public interface FileRepository extends JpaRepository<FileEntity, Long> {
     @EntityGraph(attributePaths = {"userEntity"})
     Optional<FileEntity> findEntityGraphById(Long fileId);
 
+    @EntityGraph(attributePaths = {"userEntity"})
+    Optional<FileEntity> findEntityGraphByFileName(String fileName);
 }

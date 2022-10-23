@@ -1,5 +1,7 @@
 package com.test.genesis.strategy;
 
+import com.test.genesis.domain.file.FileEntity;
+import com.test.genesis.domain.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -7,8 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -17,21 +21,22 @@ import java.util.UUID;
 @Component
 public class LocalFileUpload implements FileUpload{
 
-    private final String uploadPath = "C:\\upload";
+    private final String uploadPath = "C:\\Users\\choih\\OneDrive\\문서\\GitHub\\Genesis_Lab_Tes\\genesis\\src\\main\\resources\\files";
 
-    public String upload(MultipartFile multipartFile) {
+    public FileEntity upload(MultipartFile multipartFile, UserEntity userEntity) {
         String originalName = multipartFile.getOriginalFilename();
-        String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
         String uuid = UUID.randomUUID().toString();
-        String folderUrl = makeFolder();
-        String saveUrl = uploadPath + File.separator + folderUrl + File.separator + uuid + "_" + fileName;
-        Path path = Paths.get(saveUrl);
+        String fileName = uuid + "_" + originalName.substring(originalName.lastIndexOf("\\") + 1);
+
+//        String folderUrl = makeFolder();
+//        String saveUrl = uploadPath + folderUrl + File.separator + File.separator  + uuid + "_" + fileName;
+        Path path = Paths.get(uploadPath).resolve(fileName);
         try {
-            multipartFile.transferTo(path);
+            Files.copy(multipartFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException("파일 업로드에 실패하였습니다." + e.getMessage());
         }
-        return saveUrl;
+        return new FileEntity(fileName, path.toString(), multipartFile.getContentType(), multipartFile.getSize(), userEntity);
     }
 
     private String makeFolder() {
