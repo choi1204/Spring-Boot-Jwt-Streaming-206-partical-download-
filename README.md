@@ -1,4 +1,4 @@
-# Genesis_Lab_Test
+# Streanubg
 
 - [x] 유저관리
   - [x] 회원가입
