@@ -1,4 +1,4 @@
-# Streanubg
+# Streming
 
 - [x] 유저관리
   - [x] 회원가입
